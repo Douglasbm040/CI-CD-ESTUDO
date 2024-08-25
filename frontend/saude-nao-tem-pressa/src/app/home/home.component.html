@@ -1,0 +1,62 @@
+<div class="container">
+  <h2>Calculadora da Saúde</h2>
+  <form (ngSubmit)="submitForm()">
+    <div>
+      <label>
+        <input
+          type="radio"
+          name="calculation"
+          value="0"
+          [(ngModel)]="selectedCalculation"
+        />
+        IMC
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="calculation"
+          value="1"
+          [(ngModel)]="selectedCalculation"
+        />
+        IAC
+      </label>
+    </div>
+
+    <div>
+      <label for="altura">Altura (cm):</label>
+      <input
+        type="number"
+        id="altura"
+        [(ngModel)]="altura"
+        name="altura"
+        required
+      />
+    </div>
+
+    <div *ngIf="selectedCalculation === '0'">
+      <label for="peso">Peso (kg):</label>
+      <input type="number" id="peso" [(ngModel)]="peso" name="peso" required />
+    </div>
+
+    <div *ngIf="selectedCalculation === '1'">
+      <label for="idade">Idade:</label>
+      <input type="number" id="idade" [(ngModel)]="idade" name="idade" />
+
+      <label for="circunferenciaQuadril">Circunferência do Quadril (cm):</label>
+      <input
+        type="number"
+        id="circunferenciaQuadril"
+        [(ngModel)]="circunferenciaQuadril"
+        name="circunferenciaQuadril"
+      />
+
+      <label for="genero">Gênero: </label>
+      <select id="genero" [(ngModel)]="genero" name="genero">
+        <option value="0">Masculino</option>
+        <option value="1">Feminino</option>
+      </select>
+    </div>
+
+    <button type="submit">Calcular</button>
+  </form>
+</div>
