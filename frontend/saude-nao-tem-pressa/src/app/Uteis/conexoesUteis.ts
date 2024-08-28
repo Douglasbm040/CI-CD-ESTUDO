@@ -1,3 +1,3 @@
 export class ConexoesUteis {
-  static readonly URL_API = 'http://localhost:8080/api/calcular';
+  static readonly URL_API = 'https://ci-cd-estudo.onrender.com/api/calcular';
 }
