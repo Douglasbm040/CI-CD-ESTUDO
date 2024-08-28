@@ -1,16 +1,27 @@
-# Etapa 1: Construir a aplicação Angular
-FROM node:18-alpine AS builder
+# Etapa 1: Construir a aplicação
+FROM maven:3.8.6-eclipse-temurin-17-alpine AS builder
 
-# Define o diretório de trabalho
+# Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copia o restante dos arquivos da aplicação
-COPY ./frontend/saude-nao-tem-pressa .
+# Copia o arquivo de configuração do Maven e os arquivos de código-fonte para o contêiner
+COPY ./demo/pom.xml .
+COPY ./demo/src ./src
 
-# Instala o Angular CLI como dependência local
-RUN npm install
-RUN npm install @angular/cli@ -g
-EXPOSE 4200
+# Compila o projeto e gera o arquivo JAR
+RUN mvn clean package -DskipTests
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Etapa 2: Configurar o contêiner para rodar a aplicação
+FROM eclipse-temurin:17-jdk-alpine
 
+# Define o diretório de trabalho dentro do contêiner
+WORKDIR /app
+
+# Copia o arquivo JAR gerado na etapa de build para a imagem final
+COPY --from=builder /app/target/*.jar app.jar
+
+# Exponha a porta que o Spring Boot vai rodar (geralmente 8080)
+EXPOSE 8080
+
+# Comando para rodar a aplicação
+ENTRYPOINT ["java", "-jar", "app.jar"]
